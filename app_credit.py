@@ -39,7 +39,7 @@ def load_all():
     
     def load_model():
         # load
-        model = load('best_lgbm.joblib')
+        model = load('best_model.joblib')
         return model
     # Load model
     model = load_model()
