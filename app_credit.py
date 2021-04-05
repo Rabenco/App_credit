@@ -383,6 +383,8 @@ if st.sidebar.button("Contract type"):
 
 st.sidebar.subheader('📈 SHAP explainer')
 def shap_explainer():
+    ''' calculate shap values and display explainer
+    '''
     if st.sidebar.button("Explain Results by SHAP"):
         with st.spinner('** ⏳ Calculating shap values...**'):
             st.header("**SHAP : explain results**")
