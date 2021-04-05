@@ -382,28 +382,30 @@ if st.sidebar.button("Contract type"):
 ###############         SHAP         #######################
 
 st.sidebar.subheader('📈 SHAP explainer')
-if st.sidebar.button("Explain Results by SHAP"):
-    with st.spinner('** ⏳ Calculating shap values...**'):
-        st.header("**SHAP : explain results**")
-        st.markdown("<h4 style='text-align: center'><strong>How most important features impacts Class prediction?</strong></h4>", unsafe_allow_html=True)
-        st.write('*__Force plot__ shows, how opposite are the features strenghs*')
-        if st.sidebar.checkbox("SHAP / Hide", value = True):
-            st.write('**SHAP HELP**')
-            img_help_shap =  Image.open("Images/shap_explain.png") 
-            st.image(img_help_shap,
-                    width=700)
+def shap_explainer():
+    if st.sidebar.button("Explain Results by SHAP"):
+        with st.spinner('** ⏳ Calculating shap values...**'):
+            st.header("**SHAP : explain results**")
+            st.markdown("<h4 style='text-align: center'><strong>How most important features impacts Class prediction?</strong></h4>", unsafe_allow_html=True)
+            st.write('*__Force plot__ shows, how opposite are the features strenghs*')
+            if st.sidebar.checkbox("SHAP / Hide", value = True):
+                st.write('**SHAP HELP**')
+                img_help_shap =  Image.open("Images/shap_explain.png") 
+                st.image(img_help_shap,
+                        width=700)
     
-        explainer = shap.TreeExplainer(model)
-        row_to_show = data_shap[data_shap["SK_ID_CURR"]==client_id].index
-        data_cal = data_shap.set_index("SK_ID_CURR")
-        data_for_prediction = data_cal.iloc[row_to_show]  # use 1 row of data here. Could use multiple rows if desired
-        data_for_prediction_array = data_for_prediction.values.reshape(1, -1)
-        # Calculate Shap values
-        shap_values = explainer.shap_values(data_for_prediction_array)
-        ind_fig = shap.force_plot(explainer.expected_value[1], 
-                        shap_values[1], 
-                        data_for_prediction, 
-                        plot_cmap=["#EF553B","#636EFA"])
-        ind_fig_html = f"<head>{shap.getjs()}</head><body>{ind_fig.html()}</body>"
-        st.write('**SHAP Force plot for the selected client**')
-        components.html(ind_fig_html, height=120)
+            explainer = shap.TreeExplainer(model)
+            row_to_show = data_shap[data_shap["SK_ID_CURR"]==client_id].index
+            data_cal = data_shap.set_index("SK_ID_CURR")
+            data_for_prediction = data_cal.iloc[row_to_show]  # use 1 row of data here. Could use multiple rows if desired
+            data_for_prediction_array = data_for_prediction.values.reshape(1, -1)
+            # Calculate Shap values
+            shap_values = explainer.shap_values(data_for_prediction_array)
+            ind_fig = shap.force_plot(explainer.expected_value[1], 
+                            shap_values[1], 
+                            data_for_prediction, 
+                            plot_cmap=["#EF553B","#636EFA"])
+            ind_fig_html = f"<head>{shap.getjs()}</head><body>{ind_fig.html()}</body>"
+            st.write('**SHAP Force plot for the selected client**')
+            components.html(ind_fig_html, height=120)
+shap_explainer()
